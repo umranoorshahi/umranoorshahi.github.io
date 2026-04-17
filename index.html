@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Adnani">
-<link rel="manifest" href='data:application/manifest+json,{"name":"Adnani Connected","short_name":"Adnani","description":"Muslim Halwai Adnani Biradari","start_url":"/","display":"standalone","orientation":"portrait","theme_color":"%2314532d","background_color":"%2314532d","lang":"en","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2720%27 fill=%27%2314532d%27/%3E%3Ctext y=%2782%27 font-size=%2770%27 x=%2715%27%3E%F0%9F%95%8C%3C/text%3E%3C/svg%3E","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"}]}'>
+<link rel="manifest" href='data:application/manifest+json,{"name":"Adnani Connected","short_name":"Adnani","description":"Muslim Halwai Adnani Biradari","start_url":"/Adnani/","display":"standalone","orientation":"portrait","theme_color":"%2314532d","background_color":"%2314532d","lang":"en","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2720%27 fill=%27%2314532d%27/%3E%3Ctext y=%2782%27 font-size=%2770%27 x=%2715%27%3E%F0%9F%95%8C%3C/text%3E%3C/svg%3E","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"}]}'>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 // Inline Service Worker via Blob — NO external sw.js file needed
@@ -459,6 +459,28 @@ body.urdu{font-family:'Amiri',serif;direction:rtl;}
 .member-check:last-child{border-bottom:none;}
 .member-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--p2);}
 
+/* CHAT MENU */
+.cw-mi{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;font-size:.85rem;border-bottom:1px solid var(--s3);}
+.cw-mi:last-child{border-bottom:none;}
+.cw-mi:active{background:var(--s2);}
+
+/* GLOBAL SEARCH */
+#global-search{position:fixed;inset:0;z-index:500;background:var(--bg);display:none;flex-direction:column;}
+#global-search.on{display:flex;}
+.gs-hdr{padding:10px 12px;background:var(--s1);border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:8px;}
+.gs-inp{flex:1;padding:8px 14px;border:1.5px solid var(--s3);border-radius:var(--rf);font-size:.9rem;outline:none;background:var(--s2);}
+.gs-inp:focus{border-color:var(--p3);}
+.gs-back{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--t1);padding:4px;}
+.gs-tabs{display:flex;border-bottom:2px solid var(--s3);}
+.gs-tab{flex:1;padding:9px;background:none;border:none;cursor:pointer;font-size:.78rem;font-weight:600;color:var(--t3);border-bottom:2px solid transparent;margin-bottom:-2px;}
+.gs-tab.on{color:var(--p2);border-bottom-color:var(--p2);}
+.gs-results{flex:1;overflow-y:auto;}
+.gs-item{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--s3);}
+.gs-item:active{background:var(--s2);}
+.gs-item-info h4{font-size:.85rem;font-weight:600;}
+.gs-item-info p{font-size:.72rem;color:var(--t3);margin-top:2px;}
+.gs-section{padding:6px 14px 4px;font-size:.7rem;font-weight:700;color:var(--t4);background:var(--s2);text-transform:uppercase;letter-spacing:.5px;}
+
 /* TOAST */
 #toast{position:fixed;bottom:calc(var(--nh)+12px);left:50%;transform:translateX(-50%);background:rgba(17,24,39,.92);color:#fff;padding:9px 18px;border-radius:var(--rf);font-size:.8rem;font-weight:500;z-index:1000;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;box-shadow:var(--sh4);}
 
@@ -725,6 +747,23 @@ body.urdu{font-family:'Amiri',serif;direction:rtl;}
   </div>
 </div>
 
+<!-- GLOBAL SEARCH -->
+<div id="global-search">
+  <div class="gs-hdr">
+    <button class="gs-back" id="gs-back">←</button>
+    <input type="text" class="gs-inp" id="gs-inp" placeholder="Search members, messages, posts...">
+  </div>
+  <div class="gs-tabs">
+    <button class="gs-tab on" data-gtab="all">All</button>
+    <button class="gs-tab" data-gtab="members">👥 Members</button>
+    <button class="gs-tab" data-gtab="messages">💬 Chats</button>
+    <button class="gs-tab" data-gtab="posts">📰 Posts</button>
+  </div>
+  <div class="gs-results" id="gs-results">
+    <div class="gs-empty">🔍 Type to search...</div>
+  </div>
+</div>
+
 <!-- SPLASH -->
 <div id="spl" style="display:none;">
   <div class="sl">🕌</div>
@@ -745,6 +784,7 @@ body.urdu{font-family:'Amiri',serif;direction:rtl;}
   <div class="hr">
     <div class="opill"><div class="odot"></div><span id="oc">18</span></div>
     <button class="lchip" id="lchip">اردو</button>
+    <button class="hb" id="search-hb" title="Search">🔍</button>
     <button class="hb" id="azan-hb" title="Prayer Times">🕌</button>
     <button class="hb" id="notif-hb">🔔<span class="hbadge" id="nb">3</span></button>
     <button class="hb" id="prof-hb">👤</button>
@@ -1073,6 +1113,20 @@ body.urdu{font-family:'Amiri',serif;direction:rtl;}
     <div style="flex:1;min-width:0;"><h3 id="cw-nm">—</h3><p class="sub" id="cw-sub">Online</p></div>
     <button class="hb" id="cw-call">📞</button>
     <button class="hb" id="cw-vid">📹</button>
+    <button class="hb" id="cw-menu-btn" style="font-size:1.1rem;">⋮</button>
+  </div>
+  <!-- Chat Menu Dropdown -->
+  <div id="cw-menu" style="display:none;position:absolute;top:56px;right:8px;z-index:420;background:var(--s1);border-radius:var(--r12);box-shadow:var(--sh4);min-width:180px;overflow:hidden;">
+    <div class="cw-mi" id="cwm-search"><span>🔍</span> Search Messages</div>
+    <div class="cw-mi" id="cwm-mute"><span>🔕</span> Mute Notifications</div>
+    <div class="cw-mi" id="cwm-wallpaper"><span>🖼️</span> Wallpaper</div>
+    <div class="cw-mi" id="cwm-shortcut"><span>📌</span> Add to Home Screen</div>
+    <div class="cw-mi" id="cwm-clear" style="color:var(--amber);"><span>🗑️</span> Clear Chat</div>
+    <div class="cw-mi" id="cwm-block" style="color:var(--red);"><span>🚫</span> Block Contact</div>
+  </div>
+  <!-- Search in chat bar -->
+  <div id="cw-search-bar" style="display:none;padding:6px 10px;background:var(--s2);border-bottom:1px solid var(--s3);">
+    <input type="text" id="cw-search-inp" placeholder="Search messages..." style="width:100%;padding:7px 12px;border:1.5px solid var(--s3);border-radius:var(--rf);font-size:.84rem;outline:none;background:var(--s1);">
   </div>
   <div class="cwb" id="cw-body"></div>
   <div class="cwf">
@@ -1288,17 +1342,26 @@ const mkAvi=(name,cls='md')=>`<div class="avi ${cls}" style="background:${avC(na
 // ═══════════════════════════════════
 // LANG & DARK
 // ═══════════════════════════════════
+var _applyingLang=false;
 function applyLang(l){
-  lang=l;localStorage.setItem('lang',l);
-  const ur=l==='ur';
-  document.documentElement.lang=l;document.documentElement.dir=ur?'rtl':'ltr';
-  document.body.classList.toggle('urdu',ur);
-  const lc=gel('lchip');if(lc)lc.textContent=ur?'English':'اردو';
-  const lab=gel('lab');if(lab)lab.textContent=ur?'🌐 View in English':'🌐 اردو میں دیکھیں';
-  const lsv=gel('lang-sv');if(lsv)lsv.textContent=ur?'اردو':'English';
-  const inp=gel('q-srch');if(inp)inp.placeholder=ur?'سورہ تلاش کریں...':'Search Surah...';
-  const mi=gel('mem-srch');if(mi)mi.placeholder=ur?'نام تلاش کریں...':'Search name, city, role...';
+  if(_applyingLang)return;
+  _applyingLang=true;
+  try{
+    lang=l;
+    localStorage.setItem('lang',l);
+    const ur=l==='ur';
+    document.documentElement.lang=l;
+    document.documentElement.dir=ur?'rtl':'ltr';
+    document.body.classList.toggle('urdu',ur);
+    const lc=gel('lchip');if(lc)lc.textContent=ur?'English':'اردو';
+    const lab=gel('lab');if(lab)lab.textContent=ur?'🌐 View in English':'🌐 اردو میں دیکھیں';
+    const lsv=gel('lang-sv');if(lsv)lsv.textContent=ur?'اردو':'English';
+    const inp=gel('q-srch');if(inp)inp.placeholder=ur?'سورہ تلاش کریں...':'Search Surah...';
+    const mi=gel('mem-srch');if(mi)mi.placeholder=ur?'نام تلاش کریں...':'Search name, city, role...';
+  }catch(e){}
+  _applyingLang=false;
 }
+
 function toggleLang(){applyLang(lang==='en'?'ur':'en');}
 function applyDark(){document.body.classList.toggle('dark',dark);const d=gel('dark-sv');if(d)d.textContent=dark?'On':'Off';}
 function toggleDark(){dark=!dark;localStorage.setItem('dark',dark?'1':'0');applyDark();}
@@ -1313,7 +1376,14 @@ const sUser=u=>{localStorage.setItem('usr',JSON.stringify(u));CU=u;};
 
 // Safe element getter — prevents null crashes
 const gel=id=>document.getElementById(id);
-const on=(id,ev,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};
+const _bound=new Set();
+const on=(id,ev,fn)=>{
+  const key=id+'_'+ev;
+  if(_bound.has(key))return; // already bound
+  _bound.add(key);
+  const el=document.getElementById(id);
+  if(el)el.addEventListener(ev,fn);
+};
 
 on('ph-inp','input',function(){this.value=this.value.replace(/\D/g,'');});
 on('otp-btn','click',sendOTP);
@@ -1402,7 +1472,7 @@ async function verifyOTP(){
           if(adl)adl.style.display='block';
         }
       }
-      try{initApp();}catch(e){}
+      try{initApp();setTimeout(startApprovalPoller,2000);}catch(e){}
     },1500);
   }
 
@@ -1454,6 +1524,8 @@ async function saveProfile(){
   const city=(cityInp?cityInp.value:'').trim();
   if(!name||!city){try{showToast('Name and city required');}catch(e){}return;}
   const adm=isAdminPhone(phone);
+
+  // Save profile to server
   try{
     const r=await fetch(SERVER+'/api/auth/profile',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+gTok()},
@@ -1463,9 +1535,27 @@ async function saveProfile(){
   }catch(e){
     sUser({...CU,name,city,approved:adm,isAdmin:adm,role:adm?'admin':'user'});
   }
+
+  // Add to PENDING so ANY approver phone can see it
+  if(!adm){
+    const exists=PENDING.find(p=>p.phone===phone);
+    if(!exists){
+      var _np={id:Date.now(),name:name,city:city,phone:phone,requested:new Date().toLocaleTimeString()};
+      PENDING.push(_np);
+      try{var _s=JSON.parse(localStorage.getItem('adnani_pending')||'[]');_s.push(_np);localStorage.setItem('adnani_pending',JSON.stringify(_s));}catch(_e){}
+    }
+    // Also register on server as pending
+    try{
+      fetch(SERVER+'/api/auth/register',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name,city,phone,status:'pending'})
+      }).catch(()=>{});
+    }catch(e){}
+  }
+
   if(adm){
     try{showToast('🛡️ Admin access granted!');}catch(e){}
-    // Direct launch
     var pr=document.getElementById('ap-prof');if(pr)pr.style.display='none';
     var spl=document.getElementById('spl');if(spl)spl.style.display='flex';
     setTimeout(function(){
@@ -1474,12 +1564,12 @@ async function saveProfile(){
       var nav=document.getElementById('nav');if(nav)nav.style.display='flex';
       var app=document.getElementById('app');if(app)app.style.display='block';
       if(CU){var nm=document.getElementById('prof-nm');if(nm)nm.textContent=CU.name||'User';}
-      try{initApp();}catch(e){}
+      try{initApp();setTimeout(startApprovalPoller,2000);}catch(e){}
     },1500);
   } else {
-    // Show pending screen
     var pr=document.getElementById('ap-prof');if(pr)pr.style.display='none';
     var pp=document.getElementById('pp');if(pp)pp.classList.add('v');
+    showToast('✅ Request sent! Admin will approve soon.');
   }
 }
 
@@ -1496,8 +1586,41 @@ function handleUser(u){
   launchApp();
 }
 function showPending(){hideAllAuth();gel('pp').classList.add('v');}
-async function checkApproval(){try{const r=await fetch(SERVER+'/api/auth/status',{headers:{'Authorization':'Bearer '+gTok()}});const d=await r.json();if(d.approved)launchApp();else showToast('Not approved yet.');}catch(e){showToast('Cannot connect to server.');}}
-function doLogout(){localStorage.clear();CU=null;['hdr','app','nav'].forEach(id=>{const _e=gel(id);if(_e)_e.style.display='none';});hideAllAuth();showAuth('ap-phone');}
+async function checkApproval(){
+  var btn=document.getElementById('chk-btn');
+  if(btn){btn.disabled=true;btn.textContent='Checking...';}
+  try{
+    var r=await fetch(SERVER+'/api/auth/status',{headers:{'Authorization':'Bearer '+gTok()}});
+    var d=await r.json();
+    if(d.approved){
+      // Direct DOM launch - no launchApp() crash
+      var u=gUser();
+      if(u){u.approved=true;sUser(u);}
+      var pp=document.getElementById('pp');if(pp)pp.classList.remove('v');
+      var hdr=document.getElementById('hdr');if(hdr)hdr.style.display='flex';
+      var nav=document.getElementById('nav');if(nav)nav.style.display='flex';
+      var app=document.getElementById('app');if(app)app.style.display='block';
+      showToast('✅ Approved! Welcome!');
+      try{initApp();}catch(e){}
+    } else {
+      showToast('⏳ Not approved yet. Please wait.');
+    }
+  }catch(e){
+    // If server fails, check locally (demo mode)
+    var u=gUser();
+    if(u&&u.approved){
+      var pp=document.getElementById('pp');if(pp)pp.classList.remove('v');
+      var hdr=document.getElementById('hdr');if(hdr)hdr.style.display='flex';
+      var nav=document.getElementById('nav');if(nav)nav.style.display='flex';
+      var app=document.getElementById('app');if(app)app.style.display='block';
+      try{initApp();}catch(e2){}
+    } else {
+      showToast('⏳ Not approved yet. Contact Sri Md. Irfan: 9839060377');
+    }
+  }
+  if(btn){btn.disabled=false;btn.textContent='🔄 Check Status';}
+}
+function doLogout(){localStorage.clear();CU=null;_appInited=false;_clockRunning=false;_bound.clear();['hdr','app','nav'].forEach(id=>{const _e=gel(id);if(_e)_e.style.display='none';});hideAllAuth();showAuth('ap-phone');}
 function showAuth(id){hideAllAuth();const _el=gel(id);if(_el)_el.classList.remove('h');applyLang(lang);}
 function hideAllAuth(){['ap-phone','ap-otp','ap-prof'].forEach(id=>{const _e=gel(id);if(_e)_e.classList.add('h');});gel('pp').classList.remove('v');}
 
@@ -1510,7 +1633,7 @@ function launchApp(){
     gel('app').style.display='block';
     if(CU){
       gel('prof-nm').textContent=CU.name||'User';
-      gel('prof-cy').textContent=(CU.city||'')+(CU.isAdmin?' · Admin':' · Member');
+      gel('prof-cy').textContent=(CU.city||'')+(CU.isAdmin?' · Admin':CU.isSuperUser?' · Member':' · Member');
       setAvi(gel('prof-av'),CU.name||'U');
       setAvi(gel('pc-av'),CU.name||'U');
       setAvi(gel('cmt-av'),CU.name||'U');
@@ -1579,7 +1702,7 @@ function showScreen(name){
   closeNotif();
   if(name==='feed')loadPosts();
   if(name==='admin')renderAdmin();
-  if(name==='approve')renderApproveList();
+  if(name==='approve'){renderApproveList();}
   if(name==='quran'&&!audioUnlocked){
     // Show gold pulse button for browsers
     setTimeout(()=>gel('audio-unlock').classList.add('show'),700);
@@ -1608,7 +1731,7 @@ on('prof-photo-inp','change',function(){
 // NOTIFICATIONS
 // ═══════════════════════════════════
 let notifications=[
-  {id:1,icon:'🤝',bg:'#dcfce7',title:'New member requesting approval',text:'Mohammad Usman — Mumbai',time:'Now',read:false},
+  
   {id:2,icon:'💬',bg:'#fef9c3',title:'Message from Mahmood Ahmad',text:'Assalamu Alaikum! Meeting kal hai',time:'10:32',read:false},
   {id:3,icon:'❤️',bg:'#fce7f3',title:'Charity Drive — Last Day!',text:'Madrasa Fund — 80% complete',time:'Yesterday',read:false},
 ];
@@ -1622,8 +1745,8 @@ function addNotification(icon,bg,title,text){
   // If panel is open, refresh it
   if(gel('np').classList.contains('on'))renderNotifs();
   // Push notification (system)
-  if(Notification.permission==='granted'){
-    try{new Notification('Adnani Connected — '+title,{body:text,icon:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%2314532d%22 rx=%226%22/><text y=%2226%22 font-size=%2222%22 x=%224%22>🕌</text></svg>'});}catch(e){}
+  if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+    try{new Notification('Adnani Connected — '+title,{body:text});}catch(e){}
   }
   // Send to server for push delivery to target
   try{fetch(SERVER+'/api/notifications',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+gTok()},body:JSON.stringify({title,text,icon})}).catch(()=>{});}catch(e){}
@@ -1738,18 +1861,17 @@ let MEMBERS=[
 const COMMITTEE_IDS = new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]);
 // New members added after approval go here
 let NEW_MEMBERS = [];
-let PENDING=[
-  {id:101,name:'Mohammad Usman',city:'Mumbai',phone:'9920112233',requested:'Just now'},
-  {id:102,name:'Abdul Basit',city:'Multan',phone:'03021122334',requested:'1 hour ago'},
-];
+let PENDING=[]; // Real pending requests only
 let CHATS=[
-  {id:1, name:'Haji Mahmood Ahmad',   last:'Meeting kal hai — Jama Masjid 4 PM',      time:'10:32',unread:2,type:'direct'},
-  {id:2, name:'Sri Md. Irfan',        last:'Accounts check kar liye',                  time:'9:45', unread:0,type:'direct'},
-  {id:5, name:'Sri Abdul Karim',      last:'Jalsa ki tayaari ho gayi',                 time:'9:15', unread:1,type:'direct'},
-  {id:101,name:'Adnani Family Group', last:'Annual Jalsa 18 April — sab zaroor aayein',time:'8:45',unread:5,type:'group',members:18},
-  {id:102,name:'Biradari Network',    last:'Madrasa fund update dekh lein',            time:'7:30',unread:2,type:'group',members:12},
-  {id:103,name:'Quran Circle',        last:'Juma Surah Al-Kahf tilawat 9 AM',          time:'Yesterday',unread:0,type:'group',members:9},
+  {id:101,name:'Adnani Family Group', last:'Welcome to Adnani Connected!',time:'',unread:0,type:'group',members:18},
+  {id:102,name:'Biradari Network',    last:'',time:'',unread:0,type:'group',members:12},
+  {id:103,name:'Quran Circle',        last:'',time:'',unread:0,type:'group',members:9},
 ];
+// Load saved chats from localStorage
+try{
+  var _savedChats=JSON.parse(localStorage.getItem('adnani_chats')||'[]');
+  if(_savedChats.length)CHATS=_savedChats;
+}catch(e){}
 let BUSINESSES=[
   {id:1,name:'Mumtaz Sweets House',   type:'Trade',     desc:'Desi ghee mithai, traditional halwai products. Established, wholesale & retail.',phone:'',tags:['Sweets','Halwai','Wholesale'],city:'Rampur',color:'#7f1d1d'},
   {id:2,name:'Haspam Zanda Supplier', type:'Trade',     desc:'Zanda (flag) supplier, Bakar Ganj Patna. Bulk & retail supply.',               phone:'',tags:['Supplier','Trade'],city:'Patna',color:'#1d4ed8'},
@@ -1757,13 +1879,11 @@ let BUSINESSES=[
   {id:4,name:'Community Education',   type:'Education', desc:'Dr. Shaheen Anwar — Teacher & Medical. Community health & education support.',  phone:'',tags:['Education','Health'],city:'Bareilly',color:'#7c3aed'},
   {id:5,name:'Rafique Ahmad Services',type:'Services',  desc:'Auditor & Teacher — community financial services, Bahraich.',                  phone:'',tags:['Auditing','Teaching'],city:'Bahraich',color:'#166534'},
 ];
-let RISHTA=[
-  {id:1,name:'Ahmad (son of Mahmood)',type:'m',age:26,city:'Lucknow',edu:'B.Com',job:'Family Business',about:'Practicing Muslim, Hafiz-e-Quran, good character',ph:'9415061063'},
-  {id:2,name:'Sana Farooq',          type:'f',age:23,city:'Lucknow',edu:'BA (Urdu)',job:'Teacher',about:'Hafiza-e-Quran, religious, good family',ph:'9415072184'},
-  {id:3,name:'Bilal Ahmad Halwai',   type:'m',age:29,city:'Karachi',edu:'MBA',job:'Manager',about:'Settled, seeking pious educated girl',ph:'03012345678'},
-  {id:4,name:'Noor Fatima',          type:'f',age:22,city:'Delhi',edu:'BEd',job:'Tutor',about:'Religious, educated family, good cook',ph:'9811023456'},
-  {id:5,name:'Tariq Rashid',         type:'m',age:31,city:'Kanpur',edu:'BSc Engineering',job:'Engineer',about:'Good family, stable income, practicing Muslim',ph:'9839072345'},
-];
+// Load user-added businesses from localStorage
+try{var _sb=JSON.parse(localStorage.getItem('adnani_biz')||'[]');BUSINESSES=[...BUSINESSES,..._sb];}catch(e){}
+let RISHTA=[];
+// Load saved rishta from localStorage
+try{var _sr=JSON.parse(localStorage.getItem('adnani_rishta')||'[]');if(_sr.length)RISHTA=_sr;}catch(e){}
 let EVENTS=[
   {id:1,day:18,month:'Apr',name:'Annual Jalsa — Adnani Community',place:'Jama Masjid, Lucknow',type:'Religious',time:'After Asr',color:'#14532d'},
   {id:2,day:25,month:'Apr',name:'Business Meeting & AGM',place:'Community Hall, Lucknow',type:'Social',time:'11:00 AM',color:'#1d4ed8'},
@@ -1839,12 +1959,12 @@ function renderMembers(){
 }
 gel('mem-fb').addEventListener('click',e=>{const fp=e.target.closest('.fp');if(!fp)return;document.querySelectorAll('#mem-fb .fp').forEach(p=>p.classList.remove('on'));fp.classList.add('on');memFilter=fp.dataset.filter;renderMembers();});
 gel('mem-srch').addEventListener('input',function(){memSearch=this.value.toLowerCase();renderMembers();});
-gel('mem-list').addEventListener('click',e=>{
+on('mem-list','click',e=>{
   const b=e.target.closest('[data-action]');if(b)openChat(Number(b.dataset.id),b.dataset.name,'direct');
   const em=e.target.closest('[data-edit-mem]');if(em)editMember(Number(em.dataset.editMem));
   const dm=e.target.closest('[data-del-mem]');if(dm&&confirm('Delete this member?')){MEMBERS=MEMBERS.filter(m=>m.id!==Number(dm.dataset.delMem));renderMembers();renderAdmin();showToast('Member deleted.');}
 });
-gel('mem-list').addEventListener('dblclick',e=>{const w=e.target.closest('.avwrap');if(w)showMemberProfile(Number(w.dataset.memid));});
+on('mem-list','dblclick',e=>{const w=e.target.closest('.avwrap');if(w)showMemberProfile(Number(w.dataset.memid));});
 gel('add-member-btn').addEventListener('click',()=>{gel('am-id').value='';['am-nm','am-city','am-role','am-ph'].forEach(id=>{const _e=gel(id);if(_e)_e.value='';});gel('am-admin').value='0';document.querySelector('#so-addmember h3').textContent='👤 Add Member';openSheet('addmember');});
 
 // EDIT MEMBER
@@ -1891,7 +2011,7 @@ function renderChats(){
     </div>`).join('');
 }
 gel('chat-fb').addEventListener('click',e=>{const fp=e.target.closest('.fp');if(!fp)return;document.querySelectorAll('#chat-fb .fp').forEach(p=>p.classList.remove('on'));fp.classList.add('on');chatFilter=fp.dataset.cfilter;renderChats();});
-gel('chat-list').addEventListener('click',e=>{const row=e.target.closest('.ci');if(row)openChat(Number(row.dataset.cid),row.dataset.cname,row.dataset.ctype);});
+on('chat-list','click',e=>{const row=e.target.closest('.ci');if(row)openChat(Number(row.dataset.cid),row.dataset.cname,row.dataset.ctype);});
 gel('chat-list').addEventListener('dblclick',e=>{const w=e.target.closest('.avwrap');if(!w)return;const m=MEMBERS.find(x=>x.id===Number(w.dataset.chatMem));if(m)showMemberProfile(m.id);});
 gel('new-group-btn').addEventListener('click',()=>{
   const cont=gel('grp-members');
@@ -2104,7 +2224,7 @@ function renderBusiness(){
     </div>`).join('');
 }
 gel('biz-fb').addEventListener('click',e=>{const fp=e.target.closest('.fp');if(!fp)return;document.querySelectorAll('#biz-fb .fp').forEach(p=>p.classList.remove('on'));fp.classList.add('on');bizFilter=fp.dataset.bfilter||'all';renderBusiness();});
-gel('biz-list').addEventListener('click',e=>{
+on('biz-list','click',e=>{
   const cb=e.target.closest('[data-biz-chat]');if(cb)openChat(1,'Mahmood Ahmad','direct');
   const eb=e.target.closest('[data-edit-biz]');if(eb){const bz=BUSINESSES.find(x=>x.id===Number(eb.dataset.editBiz));if(bz){gel('b-nm').value=bz.name;gel('b-desc').value=bz.desc;gel('b-ph').value=bz.phone;gel('b-city').value=bz.city;gel('b-cat').value=bz.type;document.querySelector('#so-biz h3').textContent='✏️ Edit Business';openSheet('biz');editCtx={type:'biz',id:bz.id};}}
   const db=e.target.closest('[data-del-biz]');if(db&&confirm('Delete this business?')){BUSINESSES.splice(BUSINESSES.findIndex(x=>x.id===Number(db.dataset.delBiz)),1);renderBusiness();showToast('Business deleted.');}
@@ -2115,6 +2235,7 @@ gel('biz-sub').addEventListener('click',()=>{
   const obj={name:nm,type:gel('b-cat').value,desc:gel('b-desc').value||'—',phone:gel('b-ph').value||'—',tags:[gel('b-cat').value],city:gel('b-city').value||'—',color:'#374151'};
   if(editCtx.id){const i=BUSINESSES.findIndex(x=>x.id===editCtx.id);if(i>=0)BUSINESSES[i]={...BUSINESSES[i],...obj};}
   else BUSINESSES.push({id:Date.now(),...obj});
+  try{var ub=BUSINESSES.filter(function(b){return b.id>1000;});localStorage.setItem('adnani_biz',JSON.stringify(ub));}catch(e){}
   renderBusiness();closeSheet('biz');showToast(editCtx.id?'✅ Business updated!':'✅ Business added!');editCtx={type:'',id:null};
 });
 
@@ -2149,11 +2270,11 @@ function renderRishta(){
     </div>`).join('');
 }
 gel('rishta-fb').addEventListener('click',e=>{const fp=e.target.closest('.fp');if(!fp)return;document.querySelectorAll('#rishta-fb .fp').forEach(p=>p.classList.remove('on'));fp.classList.add('on');rishtaFilter=fp.dataset.rfilter||'all';renderRishta();});
-gel('rishta-list').addEventListener('click',e=>{
+on('rishta-list','click',e=>{
   if(e.target.closest('[data-rishta-contact]'))openChat(1,'Mahmood Ahmad (Rishta Inquiry)','direct');
   if(e.target.closest('[data-rishta-int]'))showToast('Interest noted. Admin will contact you.');
   const er=e.target.closest('[data-edit-rishta]');if(er){const r=RISHTA.find(x=>x.id===Number(er.dataset.editRishta));if(r){gel('r-nm').value=r.name;gel('r-gen').value=r.type;gel('r-age').value=r.age;gel('r-city').value=r.city;gel('r-edu').value=r.edu;gel('r-job').value=r.job;gel('r-about').value=r.about;gel('r-ph').value=r.ph||'';editCtx={type:'rishta',id:r.id};openSheet('rishta');}}
-  const dr=e.target.closest('[data-del-rishta]');if(dr&&confirm('Delete this rishta entry?')){RISHTA.splice(RISHTA.findIndex(x=>x.id===Number(dr.dataset.delRishta)),1);renderRishta();showToast('Entry deleted.');}
+  const dr=e.target.closest('[data-del-rishta]');if(dr&&confirm('Delete this rishta entry?')){RISHTA.splice(RISHTA.findIndex(x=>x.id===Number(dr.dataset.delRishta)),1);try{localStorage.setItem('adnani_rishta',JSON.stringify(RISHTA));}catch(e){}renderRishta();showToast('Entry deleted.');}
 });
 gel('addrishta-btn').addEventListener('click',()=>{editCtx={type:'',id:null};['r-nm','r-age','r-city','r-edu','r-job','r-about','r-ph'].forEach(id=>{const _e=gel(id);if(_e)_e.value='';});openSheet('rishta');});
 gel('rishta-sub').addEventListener('click',()=>{
@@ -2162,6 +2283,7 @@ gel('rishta-sub').addEventListener('click',()=>{
   const obj={name:nm,type:gel('r-gen').value,age:Number(gel('r-age').value)||0,city:gel('r-city').value||'—',edu:gel('r-edu').value||'—',job:gel('r-job').value||'—',about:gel('r-about').value||'—',ph:userPhone};
   if(editCtx.id){const i=RISHTA.findIndex(x=>x.id===editCtx.id);if(i>=0)RISHTA[i]={...RISHTA[i],...obj};}
   else RISHTA.push({id:Date.now(),...obj});
+  try{localStorage.setItem('adnani_rishta',JSON.stringify(RISHTA));}catch(e){}
   renderRishta();closeSheet('rishta');showToast(editCtx.id?'✅ Updated!':'✅ Rishta registered!');editCtx={type:'',id:null};
   if(!editCtx.id)addNotification('💍','#fce7f3','New Rishta Registration',nm+' — '+obj.city);
 });
@@ -2273,11 +2395,11 @@ gel('paysettings-sub').addEventListener('click',()=>{
 // ═══════════════════════════════════
 // FEED
 // ═══════════════════════════════════
-const FEED_SEED=[
-  {id:1,name:'Mahmood Ahmad',city:'Lucknow',text:'بِسْمِ اللَّهِ\nAssalamu Alaikum to all members! Annual Jalsa will be held on 18th April after Asr prayers at Jama Masjid, Lucknow. All members are requested to attend. Please confirm. 🕌',time:'Today 10:30',likes:14,liked:false,comments:[{id:1,name:'Abdul Rehman Halwai',text:'InshaaAllah will attend!'},{id:2,name:'Tariq Ahmad Siddiqui',text:'JazakAllah for the reminder.'}],shared:6},
-  {id:2,name:'Mohammad Farooq',city:'Kanpur',text:'Madrasa Construction Fund Update:\n\n✅ Amount collected: ₹4,80,000\n⏳ Remaining: ₹1,20,000\n\nPlease contribute generously. May Allah reward everyone. 🤲',time:'Today 8:00',likes:22,liked:false,comments:[{id:3,name:'Mahmood Ahmad',text:'MashaAllah! Great effort by all. Keep it up.'}],shared:9},
-];
-feedPosts=[...FEED_SEED];
+// Load posts from localStorage (real user posts)
+try{
+  var _fp=JSON.parse(localStorage.getItem('adnani_posts')||'[]');
+  if(_fp.length){feedPosts=_fp;}
+}catch(e){}
 
 function renderFeed(posts){
   const el=gel('feed-list');if(!el)return;
@@ -2299,13 +2421,29 @@ function renderFeed(posts){
       </div>
     </div>`).join('');
 }
-gel('feed-list').addEventListener('click',e=>{
+on('feed-list','click',e=>{
   const lb=e.target.closest('[data-like]');if(lb)toggleLike(Number(lb.dataset.like));
   const cb=e.target.closest('[data-comment]');if(cb)openComments(Number(cb.dataset.comment));
   const sb=e.target.closest('[data-share-post]');if(sb)sharePostFn(Number(sb.dataset.sharePost));
-  const db=e.target.closest('[data-post-del]');if(db&&confirm('Delete post?')){feedPosts=feedPosts.filter(p=>p.id!==Number(db.dataset.postDel));gel('pc-'+db.dataset.postDel)?.remove();showToast('Post deleted.');}
+  const db=e.target.closest('[data-post-del]');if(db&&confirm('Delete post?')){feedPosts=feedPosts.filter(p=>p.id!==Number(db.dataset.postDel));try{localStorage.setItem('adnani_posts',JSON.stringify(feedPosts.slice(0,100)));}catch(e){}gel('pc-'+db.dataset.postDel)?.remove();showToast('Post deleted.');}
 });
-function toggleLike(id){const p=feedPosts.find(x=>x.id===id);if(!p)return;p.liked=!p.liked;p.likes+=p.liked?1:-1;const lc=gel('lc-'+id);if(lc)lc.textContent=p.likes;const btn=document.querySelector(`#pc-${id} [data-like]`);if(btn){btn.innerHTML=(p.liked?'❤️':'♡')+` <span id="lc-${id}">${p.likes}</span>`;btn.classList.toggle('lk',p.liked);}}
+function toggleLike(id){
+  const p=feedPosts.find(x=>x.id===id);
+  if(!p)return;
+  p.liked=!p.liked;
+  p.likes+=p.liked?1:-1;
+  // Save to localStorage
+  try{localStorage.setItem('adnani_posts',JSON.stringify(feedPosts.slice(0,100)));}catch(e){}
+  // Update like count display
+  const lc=document.getElementById('lc-'+id);
+  if(lc)lc.textContent=p.likes;
+  // Update like button appearance
+  const btn=document.querySelector('#pc-'+id+' [data-like]');
+  if(btn){
+    btn.innerHTML=(p.liked?'❤️':'♡')+' <span id="lc-'+id+'">'+p.likes+'</span>';
+    btn.classList.toggle('lk',p.liked);
+  }
+}
 function sharePostFn(id){const p=feedPosts.find(x=>x.id===id);if(!p)return;p.shared=(p.shared||0)+1;const sc=gel('sc-'+id);if(sc)sc.textContent=p.shared;shareLink(p.text.slice(0,80)+'...');}
 function openComments(id){
   currentPostId=id;const p=feedPosts.find(x=>x.id===id);if(!p)return;
@@ -2313,13 +2451,13 @@ function openComments(id){
   gel('cmt-list').innerHTML=p.comments.length?p.comments.map(c=>`<div class="cmt" id="cmt-${c.id}"><div class="avi sm" style="background:${avC(c.name)};">${avI(c.name)}</div><div class="cmt-body"><h6>${c.name}</h6><p>${c.text}</p></div>${isAdm?`<button class="cmt-del" data-cmt-del="${c.id}" data-pid="${id}">🗑️</button>`:''}</div>`).join(''):'<div style="padding:14px;text-align:center;color:var(--t4);font-size:.82rem;">No comments yet. Be the first!</div>';
   openSheet('comment');
 }
-gel('cmt-list').addEventListener('click',e=>{const db=e.target.closest('[data-cmt-del]');if(!db)return;const cid=Number(db.dataset.cmtDel),pid=Number(db.dataset.pid);const p=feedPosts.find(x=>x.id===pid);if(p){p.comments=p.comments.filter(c=>c.id!==cid);}db.closest('.cmt')?.remove();const cc=gel('cc-'+pid);if(cc)cc.textContent=(p?.comments.length||0);showToast('Comment deleted!');});
-gel('cmt-send').addEventListener('click',submitComment);
-gel('cmt-inp-txt').addEventListener('keypress',e=>{if(e.key==='Enter')submitComment();});
-function submitComment(){const inp=gel('cmt-inp-txt'),txt=inp.value.trim();if(!txt||!currentPostId)return;const p=feedPosts.find(x=>x.id===currentPostId);if(!p)return;const isAdm=CU&&(CU.isAdmin||CU.role==='admin'||CU.isSuperUser||CU.canApprove);const nc={id:Date.now(),name:CU?.name||'You',text:txt};p.comments.push(nc);gel('cmt-list').innerHTML+=`<div class="cmt" id="cmt-${nc.id}"><div class="avi sm" style="background:${avC(nc.name)};">${avI(nc.name)}</div><div class="cmt-body"><h6>${nc.name}</h6><p>${nc.text}</p></div>${isAdm?`<button class="cmt-del" data-cmt-del="${nc.id}" data-pid="${currentPostId}">🗑️</button>`:''}</div>`;const cc=gel('cc-'+currentPostId);if(cc)cc.textContent=p.comments.length;inp.value='';showToast('Comment posted!');}
+on('cmt-list','click',e=>{const db=e.target.closest('[data-cmt-del]');if(!db)return;const cid=Number(db.dataset.cmtDel),pid=Number(db.dataset.pid);const p=feedPosts.find(x=>x.id===pid);if(p){p.comments=p.comments.filter(c=>c.id!==cid);}db.closest('.cmt')?.remove();const cc=gel('cc-'+pid);if(cc)cc.textContent=(p?.comments.length||0);showToast('Comment deleted!');});
+on('cmt-send','click',submitComment);
+on('cmt-inp-txt','keypress',e=>{if(e.key==='Enter')submitComment();});
+function submitComment(){const inp=gel('cmt-inp-txt'),txt=inp.value.trim();if(!txt||!currentPostId)return;const p=feedPosts.find(x=>x.id===currentPostId);if(!p)return;const isAdm=CU&&(CU.isAdmin||CU.role==='admin'||CU.isSuperUser||CU.canApprove);const nc={id:Date.now(),name:CU?.name||'You',text:txt};p.comments.push(nc);try{localStorage.setItem('adnani_posts',JSON.stringify(feedPosts.slice(0,100)));}catch(_e){}gel('cmt-list').innerHTML+=`<div class="cmt" id="cmt-${nc.id}"><div class="avi sm" style="background:${avC(nc.name)};">${avI(nc.name)}</div><div class="cmt-body"><h6>${nc.name}</h6><p>${nc.text}</p></div>${isAdm?`<button class="cmt-del" data-cmt-del="${nc.id}" data-pid="${currentPostId}">🗑️</button>`:''}</div>`;const cc=gel('cc-'+currentPostId);if(cc)cc.textContent=p.comments.length;inp.value='';showToast('Comment posted!');}
 
 // Post photos
-gel('post-img-inp').addEventListener('change',function(){postImgs=[];const prev=gel('post-prev');prev.innerHTML='';Array.from(this.files).slice(0,4).forEach(f=>{const r=new FileReader();r.onload=e=>{postImgs.push(e.target.result);const w=document.createElement('div');w.className='prev-w';const img=document.createElement('img');img.src=e.target.result;const rm=document.createElement('button');rm.className='prev-rm';rm.textContent='✕';rm.onclick=()=>{w.remove();postImgs=postImgs.filter(x=>x!==e.target.result);};w.appendChild(img);w.appendChild(rm);prev.appendChild(w);};r.readAsDataURL(f);});});
+on('post-img-inp','change',function(){postImgs=[];const prev=gel('post-prev');prev.innerHTML='';Array.from(this.files).slice(0,4).forEach(f=>{const r=new FileReader();r.onload=e=>{postImgs.push(e.target.result);const w=document.createElement('div');w.className='prev-w';const img=document.createElement('img');img.src=e.target.result;const rm=document.createElement('button');rm.className='prev-rm';rm.textContent='✕';rm.onclick=()=>{w.remove();postImgs=postImgs.filter(x=>x!==e.target.result);};w.appendChild(img);w.appendChild(rm);prev.appendChild(w);};r.readAsDataURL(f);});});
 
 // Location in post — fixed with high accuracy + reverse geocode
 gel('loc-post-btn').addEventListener('click',function(){
@@ -2353,13 +2491,16 @@ gel('loc-post-btn').addEventListener('click',function(){
   );
 });
 
-gel('post-submit-btn').addEventListener('click',async()=>{
+on('post-submit-btn','click',async()=>{
   const txt=gel('post-txt').value.trim();if(!txt&&!postImgs.length){showToast('Write something first');return;}
   const np={id:Date.now(),name:CU?.name||'You',city:CU?.city||'',text:txt,time:'Just now',likes:0,liked:false,comments:[],shared:0,imgs:[...postImgs]};
-  feedPosts.unshift(np);renderFeed(feedPosts);gel('post-txt').value='';postImgs=[];gel('post-prev').innerHTML='';
+  feedPosts.unshift(np);
+  // Save to localStorage
+  try{localStorage.setItem('adnani_posts',JSON.stringify(feedPosts.slice(0,100)));}catch(e){}
+  renderFeed(feedPosts);gel('post-txt').value='';postImgs=[];gel('post-prev').innerHTML='';
   showToast('Post shared!');
   addNotification('📰','#f0fdf4','Post Shared','Your post is now live in Community Feed');
-  if(Notification.permission==='granted'){try{new Notification('Adnani Connected','Your post is live!');}catch(e){}}
+  if(typeof Notification!=='undefined'&&Notification.permission==='granted'){try{new Notification('Adnani Connected',{body:'Your post is live!'});}catch(e){}}
   try{await fetch(SERVER+'/api/posts',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+gTok()},body:JSON.stringify({text:txt,phone})});}catch(e){}
 });
 async function loadPosts(){try{const r=await fetch(SERVER+'/api/posts',{headers:{'Authorization':'Bearer '+gTok()}});const d=await r.json();const posts=d.posts||d||[];if(Array.isArray(posts)&&posts.length){feedPosts=[...posts.map((p,i)=>({id:p.id||p._id||i+100,name:p.author||p.name||'Community',city:p.city||'',text:p.text||p.content||'',time:p.createdAt?new Date(p.createdAt).toLocaleDateString():'',likes:p.likes||0,liked:false,comments:[],shared:0})),...FEED_SEED];renderFeed(feedPosts);return;}}catch(e){}renderFeed(feedPosts);}
@@ -2430,13 +2571,146 @@ gel('adm-add-rishta').addEventListener('click',()=>gel('addrishta-btn').click())
 // APPROVE MEMBERS (all approved members)
 // ═══════════════════════════════════
 function renderApproveList(){
-  gel('pend-count').textContent=PENDING.length;
-  gel('approve-list').innerHTML=PENDING.length?PENDING.map(m=>`<div class="pu">${mkAvi(m.name,'md')}<div class="pui"><h4>${m.name}</h4><p>${m.phone} · ${m.city} · ${m.requested}</p></div><div class="pub"><button class="btn bs" style="font-size:.7rem;padding:5px 9px;" data-appv="${m.id}">✓ Approve</button><button class="btn br" style="font-size:.7rem;padding:5px 9px;" data-appv-rej="${m.id}">✕</button></div></div>`).join(''):'<div class="empty">No pending approvals ✅</div>';
+  const pc=gel('pend-count');
+  const apc=gel('ap-c');
+  const el=gel('approve-list');if(!el)return;
+
+  // Load from localStorage first (cross-device sharing)
+  try{
+    const stored=JSON.parse(localStorage.getItem('adnani_pending')||'[]');
+    stored.forEach(function(p){
+      if(!PENDING.find(function(x){return x.phone===p.phone;})){
+        PENDING.push(p);
+      }
+    });
+  }catch(e){}
+
+  if(pc)pc.textContent=PENDING.length;
+  if(apc)apc.textContent=PENDING.length;
+
+  // Show what we have immediately
+  renderApproveListUI();
+
+  // Also try server
+  fetch(SERVER+'/api/users/pending',{headers:{'Authorization':'Bearer '+gTok()}})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      const serverPending=d.pending||d||[];
+      if(Array.isArray(serverPending)&&serverPending.length){
+        serverPending.forEach(function(p){
+          const ph=p.phone||p.mobile||'';
+          if(!PENDING.find(function(x){return x.phone===ph;})){
+            PENDING.push({
+              id:p.id||p._id||Date.now(),
+              name:p.name||'New User',
+              city:p.city||'Unknown',
+              phone:ph,
+              requested:p.createdAt?new Date(p.createdAt).toLocaleString():'Recently'
+            });
+          }
+        });
+        if(pc)pc.textContent=PENDING.length;
+        if(apc)apc.textContent=PENDING.length;
+        renderApproveListUI();
+      }
+    })
+    .catch(function(){});
 }
-gel('approve-list').addEventListener('click',e=>{
-  const ab=e.target.closest('[data-appv]');if(ab){const id=Number(ab.dataset.appv);PENDING=PENDING.filter(m=>m.id!==id);ab.closest('.pu')?.remove();gel('pend-count').textContent=PENDING.length;showToast('✅ Member approved!');addNotification('✅','#dcfce7','You approved a member','New member can now access the app');}
-  const rb=e.target.closest('[data-appv-rej]');if(rb){PENDING=PENDING.filter(m=>m.id!==Number(rb.dataset.appvRej));rb.closest('.pu')?.remove();gel('pend-count').textContent=PENDING.length;}
+
+function renderApproveListUI(){
+  const el=gel('approve-list');if(!el)return;
+  const pc=gel('pend-count');if(pc)pc.textContent=PENDING.length;
+  
+  if(!PENDING.length){
+    el.innerHTML='<div class="empty" style="padding:40px;text-align:center;"><div style="font-size:2rem;">✅</div><p style="margin-top:8px;color:var(--t3);">No pending approvals</p></div>';
+    return;
+  }
+  
+  el.innerHTML=PENDING.map(m=>`
+    <div class="pu" id="pend-${m.id}">
+      ${mkAvi(m.name,'md')}
+      <div class="pui">
+        <h4>${m.name}</h4>
+        <p style="font-size:.7rem;color:var(--t3);">
+          📞 ${m.phone||'—'} · 📍 ${m.city||'—'}
+        </p>
+        <p style="font-size:.65rem;color:var(--t4);">⏰ ${m.requested||'Recently'}</p>
+      </div>
+      <div class="pub" style="flex-direction:column;gap:4px;">
+        <button class="btn bp" style="font-size:.72rem;padding:5px 12px;" data-appv="${m.id}">✓ Approve</button>
+        <button class="btn br" style="font-size:.72rem;padding:4px 12px;" data-appv-rej="${m.id}">✕ Reject</button>
+      </div>
+    </div>`).join('');
+}
+on('approve-list','click',e=>{
+  const ab=e.target.closest('[data-appv]');
+  if(ab){
+    const id=Number(ab.dataset.appv);
+    const pending=PENDING.find(m=>m.id===id);
+    if(pending){
+      // Add to NEW_MEMBERS (separate from committee)
+      NEW_MEMBERS.push({
+        id:Date.now(),
+        name:pending.name||'New Member',
+        city:pending.city||'—',
+        role:'Community Member',
+        phone:pending.phone||'',
+        online:false,
+        address:pending.city||'—'
+      });
+    }
+    PENDING=PENDING.filter(function(m){return m.id!==id;});
+    // Update localStorage too
+    try{localStorage.setItem('adnani_pending',JSON.stringify(PENDING));}catch(e){}
+    ab.closest('.pu')?.remove();
+    const pc=gel('pend-count');if(pc)pc.textContent=PENDING.length;
+    const apc=gel('ap-c');if(apc)apc.textContent=PENDING.length;
+    showToast('✅ Member approved!');
+    addNotification('✅','#dcfce7','Member Approved','New member can now access the app');
+    renderMembers();
+  }
+  const rb=e.target.closest('[data-appv-rej]');
+  if(rb){
+    PENDING=PENDING.filter(m=>m.id!==Number(rb.dataset.appvRej));
+    rb.closest('.pu')?.remove();
+    const pc=gel('pend-count');if(pc)pc.textContent=PENDING.length;
+    const apc=gel('ap-c');if(apc)apc.textContent=PENDING.length;
+    showToast('Member rejected');
+  }
 });
+
+// Auto-refresh pending approvals for admins every 30 seconds
+function startApprovalPoller(){
+  if(!(CU&&(CU.isAdmin||CU.isSuperUser||CU.canApprove)))return;
+  setInterval(function(){
+    try{
+      fetch(SERVER+'/api/users/pending',{headers:{'Authorization':'Bearer '+gTok()}})
+        .then(function(r){return r.json();})
+        .then(function(d){
+          if(d.pending&&d.pending.length){
+            var newCount=0;
+            d.pending.forEach(function(p){
+              if(!PENDING.find(function(x){return x.phone===p.phone;})){
+                PENDING.push({
+                  id:p.id||p._id||Date.now(),
+                  name:p.name||'New User',
+                  city:p.city||'Unknown',
+                  phone:p.phone||'—',
+                  requested:p.createdAt?new Date(p.createdAt).toLocaleString():'Recently'
+                });
+                newCount++;
+              }
+            });
+            if(newCount>0){
+              var pc=gel('pend-count');if(pc)pc.textContent=PENDING.length;
+              var apc=gel('ap-c');if(apc)apc.textContent=PENDING.length;
+              addNotification('🤝','#dcfce7','New Approval Request',newCount+' new member(s) waiting for approval');
+            }
+          }
+        }).catch(function(){});
+    }catch(e){}
+  },30000);
+}
 
 // ═══════════════════════════════════
 // CHAT WINDOW
@@ -2453,7 +2727,13 @@ function openChat(id,name,type){
   gel('cw-nm').textContent=name;
   const m=MEMBERS.find(x=>x.id===id)||CHATS.find(x=>x.id===id);
   gel('cw-sub').textContent=(m?.online?'● Online':'○ Offline');
-  if(!chatMsgs[id])chatMsgs[id]=[{text:'Assalamu Alaikum!',sent:false,time:'10:30'},{text:'Wa Alaikum Assalam! Alhamdulillah.',sent:true,time:'10:31'}];
+  // Load saved messages or start fresh
+  if(!chatMsgs[id]){
+    try{
+      var saved=JSON.parse(localStorage.getItem('adnani_msg_'+id)||'[]');
+      chatMsgs[id]=saved;
+    }catch(e){chatMsgs[id]=[];}
+  }
   renderMsgs(id);gel('cwin').classList.add('on');
 }
 function renderMsgs(id){const msgs=chatMsgs[id]||[];gel('cw-body').innerHTML=msgs.map(m=>`<div class="bub ${m.sent?'out':'in'}">${m.img?`<img src="${m.img}" alt="">`:''}${m.text?`<span>${m.text}</span>`:''}<div class="bt">${m.time}</div></div>`).join('');const b=gel('cw-body');b.scrollTop=b.scrollHeight;}
@@ -2462,16 +2742,10 @@ function sendMsg(){
   if(!txt||!activeChatId)return;
   const now=new Date(),time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
   chatMsgs[activeChatId].push({text:txt,sent:true,time});
+  try{localStorage.setItem('adnani_msg_'+activeChatId,JSON.stringify(chatMsgs[activeChatId].slice(-100)));}catch(e){}
   inp.value='';renderMsgs(activeChatId);
   try{fetch(SERVER+'/api/messages',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+gTok()},body:JSON.stringify({to:activeChatId,text:txt})});}catch(e){}
-  setTimeout(()=>{
-    const rs=['JazakAllah Khair! 🌟','InshaaAllah! 🤲','Alhamdulillah!','Ameen! 🕌','MashaAllah! BarakAllahFik'];
-    const reply=rs[Math.floor(Math.random()*rs.length)];
-    chatMsgs[activeChatId].push({text:reply,sent:false,time});
-    renderMsgs(activeChatId);
-    // Push notification for incoming message
-    addNotification('💬','#dbeafe','Message from '+activeChatName,reply.slice(0,40));
-  },1400);
+  // No auto-reply — real messages only
 }
 gel('cw-send').addEventListener('click',sendMsg);
 gel('cw-inp').addEventListener('keypress',e=>{if(e.key==='Enter')sendMsg();});
@@ -2501,9 +2775,9 @@ document.querySelectorAll('.shx').forEach(btn=>btn.addEventListener('click',()=>
 // UTILS
 // ═══════════════════════════════════
 async function reqPerms(){
-  if('Notification'in window&&Notification.permission==='default'){
+  if(typeof Notification!=='undefined'&&'Notification'in window&&Notification.permission==='default'){
     try{
-      const p=await Notification.requestPermission();
+      const p=await Notification.requestPermission().catch(()=>'denied');
       if(p==='granted'){
         showToast('Notifications enabled! 🔔');
         addNotification('✅','#dcfce7','Notifications Enabled','You will receive community updates');
@@ -2515,9 +2789,9 @@ async function reqPerms(){
         }
       }
     }catch(e){}
-  } else if(Notification.permission==='granted'){
+  } else if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
     // Test push
-    try{new Notification('Adnani Connected',{body:'Notifications are active ✅'});}catch(e){}
+    try{if(typeof Notification!=='undefined')new Notification('Adnani Connected',{body:'Notifications are active ✅'});}catch(e){}
     showToast('🔔 Notifications: Active');
   } else {
     showToast('Notifications blocked. Enable in browser settings.');
@@ -2535,7 +2809,10 @@ gel('ostrip').addEventListener('dblclick',e=>{const o=e.target.closest('.om');if
 // ═══════════════════════════════════
 // INIT
 // ═══════════════════════════════════
+var _appInited=false;
 function initApp(){
+  if(_appInited)return; // prevent multiple init calls
+  _appInited=true;
   // Spread renders over time to prevent call stack overflow on mobile
   try{ renderOnline(); }catch(e){}
   try{ renderMembers(); }catch(e){}
@@ -2639,7 +2916,10 @@ function openAzan(){
   getQibla();
 }
 
+var _clockRunning=false;
 function startClock(){
+  if(_clockRunning)return; // prevent multiple clocks
+  _clockRunning=true;
   if(clockInterval)clearInterval(clockInterval);
   function tick(){
     const now=new Date();
@@ -2942,6 +3222,121 @@ gel('gw-file').addEventListener('change',function(){
 });
 
 // (Group chat routing is already inside openChat above)
+
+// ═══════════════════════════════════════
+// CHAT MENU — Clear/Block/Mute/Shortcut
+// ═══════════════════════════════════════
+var chatMuted={};
+on('cw-menu-btn','click',function(e){
+  e.stopPropagation();
+  var m=document.getElementById('cw-menu');
+  if(m)m.style.display=(m.style.display==='block')?'none':'block';
+});
+document.addEventListener('click',function(e){
+  var m=document.getElementById('cw-menu');
+  if(m&&!e.target.closest('#cw-menu')&&!e.target.closest('#cw-menu-btn'))
+    m.style.display='none';
+});
+on('cwm-search','click',function(){
+  document.getElementById('cw-menu').style.display='none';
+  var sb=document.getElementById('cw-search-bar');
+  if(sb){var vis=sb.style.display!=='block';sb.style.display=vis?'block':'none';}
+});
+on('cw-search-inp','input',function(){
+  var q=this.value.toLowerCase();
+  if(!activeChatId)return;
+  var msgs=chatMsgs[activeChatId]||[];
+  renderMsgs(activeChatId,q?msgs.filter(function(m){return m.text&&m.text.toLowerCase().includes(q);}):msgs);
+});
+on('cwm-mute','click',function(){
+  document.getElementById('cw-menu').style.display='none';
+  chatMuted[activeChatId]=!chatMuted[activeChatId];
+  showToast(chatMuted[activeChatId]?'🔕 Muted':'🔔 Unmuted');
+});
+on('cwm-shortcut','click',function(){
+  document.getElementById('cw-menu').style.display='none';
+  showToast('📌 Browser menu → Add to Home Screen');
+});
+on('cwm-clear','click',function(){
+  document.getElementById('cw-menu').style.display='none';
+  if(!confirm('Clear all messages?'))return;
+  if(activeChatId)chatMsgs[activeChatId]=[];
+  renderMsgs(activeChatId);
+  showToast('🗑️ Chat cleared');
+});
+on('cwm-block','click',function(){
+  document.getElementById('cw-menu').style.display='none';
+  if(!confirm('Block '+activeChatName+'?'))return;
+  showToast('🚫 Blocked');
+  var cw=document.getElementById('cwin');if(cw)cw.classList.remove('on');
+});
+
+// ═══════════════════════════════════════
+// GLOBAL SEARCH
+// ═══════════════════════════════════════
+var gsTab='all';
+on('search-hb','click',function(){
+  var gs=gel('global-search');if(gs)gs.classList.add('on');
+  setTimeout(function(){var i=gel('gs-inp');if(i)i.focus();},200);
+  performSearch('');
+});
+on('gs-back','click',function(){
+  var gs=gel('global-search');if(gs)gs.classList.remove('on');
+});
+document.querySelectorAll('.gs-tab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.gs-tab').forEach(function(b){b.classList.remove('on');});
+    btn.classList.add('on');
+    gsTab=btn.dataset.gtab||'all';
+    var inp=document.getElementById('gs-inp');
+    performSearch(inp?inp.value.trim():'');
+  });
+});
+on('gs-inp','input',function(){performSearch(this.value.trim());});
+on('gs-results','click',function(e){
+  var item=e.target.closest('.gs-item');if(!item)return;
+  closeSearch();
+  if(item.dataset.gsMem)showMemberProfile(Number(item.dataset.gsMem));
+  else if(item.dataset.gsScreen)showScreen(item.dataset.gsScreen);
+  else if(item.dataset.gsChat)openChat(Number(item.dataset.gsChat),item.dataset.gsCname,item.dataset.gsCtype);
+});
+function closeSearch(){var gs=gel('global-search');if(gs)gs.classList.remove('on');}
+function performSearch(q){
+  var el=gel('gs-results');if(!el)return;
+  var qL=q.toLowerCase();
+  if(!qL){el.innerHTML='<div class="gs-empty">🔍 Type to search...</div>';return;}
+  var html='';
+  if(gsTab==='all'||gsTab==='members'){
+    var mems=MEMBERS.concat(typeof NEW_MEMBERS!=='undefined'?NEW_MEMBERS:[]);
+    var mF=mems.filter(function(m){return(m.name+m.city+m.role).toLowerCase().includes(qL);});
+    if(mF.length){
+      html+='<div class="gs-section">&#128101; Members</div>';
+      html+=mF.map(function(m){
+        return '<div class="gs-item" data-gs-mem="'+m.id+'"><div class="avi sm" style="background:'+avC(m.name)+';">'+avI(m.name)+'</div><div class="gs-item-info"><h4>'+m.name+'</h4><p>'+m.city+'</p></div></div>';
+      }).join('');
+    }
+  }
+  if(gsTab==='all'||gsTab==='posts'){
+    var pF=(typeof feedPosts!=='undefined'?feedPosts:[]).filter(function(p){return p.text&&p.text.toLowerCase().includes(qL);});
+    if(pF.length){
+      html+='<div class="gs-section">&#128240; Posts</div>';
+      html+=pF.map(function(p){
+        return '<div class="gs-item" data-gs-screen="feed"><div class="avi sm" style="background:'+avC(p.name)+';">'+avI(p.name)+'</div><div class="gs-item-info"><h4>'+p.name+'</h4><p>'+p.text.slice(0,60)+'</p></div></div>';
+      }).join('');
+    }
+  }
+  if(gsTab==='all'||gsTab==='messages'){
+    var cF=CHATS.filter(function(ch){return(ch.name+(ch.last||'')).toLowerCase().includes(qL);});
+    if(cF.length){
+      html+='<div class="gs-section">&#128172; Chats</div>';
+      html+=cF.map(function(ch){
+        return '<div class="gs-item" data-gs-chat="'+ch.id+'" data-gs-cname="'+ch.name+'" data-gs-ctype="'+ch.type+'"><div class="avi sm" style="background:'+avC(ch.name)+';">'+avI(ch.name)+'</div><div class="gs-item-info"><h4>'+ch.name+'</h4><p>'+(ch.last||'')+'</p></div></div>';
+      }).join('');
+    }
+  }
+  el.innerHTML=html||'<div class="gs-empty">No results for "'+q+'"</div>';
+}
+
 // ═══════════════════════════════════════
 // STARTUP
 // ═══════════════════════════════════════
@@ -2971,13 +3366,35 @@ function _startApp(){
     try{u=JSON.parse(localStorage.getItem('usr'));}catch(e){}
 
     if(tok&&u&&u.name){
-      // Already logged in — show app
+      // ALWAYS re-check phone for admin/superuser status
+      // This fixes stale localStorage data issue
+      var ph=String(u.phone||'').replace(/\D/g,'');
+      var onlyAdmin=(ph==='9839060377');
+      var isSuperUser=(ph==='9415061063'||ph==='9918717288');
+      var isSpecial=onlyAdmin||isSuperUser;
+      if(isSpecial){
+        u.isAdmin=onlyAdmin;
+        u.isSuperUser=isSuperUser;
+        u.canApprove=true;
+        u.approved=true;
+        u.role=onlyAdmin?'admin':'member';
+      }
       CU=u;
+      // Save corrected user back
+      try{localStorage.setItem('usr',JSON.stringify(u));}catch(e){}
       var hdr=document.getElementById('hdr');if(hdr)hdr.style.display='flex';
       var nav=document.getElementById('nav');if(nav)nav.style.display='flex';
       var app=document.getElementById('app');if(app)app.style.display='block';
       var nm=document.getElementById('prof-nm');if(nm)nm.textContent=u.name||'User';
-      try{initApp();}catch(e){}
+      // Show approve button for special users
+      if(isSpecial||u.canApprove){
+        var al=document.getElementById('approve-link');if(al)al.style.display='block';
+        var pc=document.getElementById('pend-count');if(pc)pc.textContent=PENDING.length;
+      }
+      if(onlyAdmin||u.isAdmin){
+        var adl=document.getElementById('admin-link');if(adl)adl.style.display='block';
+      }
+      try{initApp();setTimeout(startApprovalPoller,2000);}catch(e){}
     } else {
       // Show login screen
       var login=document.getElementById('ap-phone');
